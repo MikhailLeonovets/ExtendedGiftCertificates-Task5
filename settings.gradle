@@ -1,7 +1,0 @@
-rootProject.name = 'Extended-GiftCertificate'
-include 'utility'
-include 'repository'
-include 'service'
-include 'controller'
-include 'common'
-include 'api'
