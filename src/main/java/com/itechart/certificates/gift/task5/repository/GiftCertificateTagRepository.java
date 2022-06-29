@@ -1,9 +1,9 @@
 package com.itechart.certificates.gift.task5.repository;
 
-import com.itechart.certificates.gift.task5.repository.entity.GiftCertificate;
+import com.itechart.certificates.gift.task5.repository.entity.GiftCertificateTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GiftCertificateRepository extends JpaRepository<GiftCertificate, Long> {
+public interface GiftCertificateTagRepository extends JpaRepository<GiftCertificateTag, Long> {
 }
