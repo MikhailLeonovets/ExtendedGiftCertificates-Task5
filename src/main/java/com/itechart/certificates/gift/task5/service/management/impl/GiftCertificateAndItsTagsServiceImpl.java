@@ -29,6 +29,7 @@ public class GiftCertificateAndItsTagsServiceImpl implements GiftCertificateAndI
 
 	@Override
 	public GiftCertificateAndItsTags save(GiftCertificateAndItsTags giftCertificateAndItsTags) {
+
 		return null;
 	}
 
