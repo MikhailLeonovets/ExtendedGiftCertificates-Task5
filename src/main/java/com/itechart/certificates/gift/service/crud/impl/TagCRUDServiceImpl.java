@@ -6,10 +6,16 @@ import com.itechart.certificates.gift.service.validator.EntityValidator;
 import com.itechart.certificates.gift.repository.TagRepository;
 import com.itechart.certificates.gift.repository.entity.Tag;
 import com.itechart.certificates.gift.service.crud.TagCRUDService;
+import com.itechart.certificates.gift.service.validator.constant.ValidationStatus;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.INCORRECT_INPUT_MSG;
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.NULL_INPUT_MSG;
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.TAG_NOT_FOUND_MSG;
 
 @Service
 public class TagCRUDServiceImpl implements TagCRUDService {
@@ -25,16 +31,20 @@ public class TagCRUDServiceImpl implements TagCRUDService {
 
 	@Override
 	public Tag save(Tag tag) throws DataInputException {
-		if (tagValidator.validate(tag)) {
-			throw new DataInputException();
+		Pair<ValidationStatus, String> validationResult = tagValidator.validate(tag);
+		if (validationResult.getLeft().equals(ValidationStatus.NOT_VALIDATED)) {
+			throw new DataInputException(validationResult.getRight());
 		}
 		return tagRepository.save(tag);
 	}
 
 	@Override
 	public Tag save(String tagName) throws DataInputException {
-		if (tagName == null || tagName.isEmpty()) {
-			throw new DataInputException();
+		if (tagName == null) {
+			throw new DataInputException(NULL_INPUT_MSG);
+		}
+		if (tagName.isEmpty()) {
+			throw new DataInputException(INCORRECT_INPUT_MSG);
 		}
 		return tagRepository.save(new Tag(tagName));
 	}
@@ -47,23 +57,30 @@ public class TagCRUDServiceImpl implements TagCRUDService {
 	@Override
 	public Tag findById(Long id) throws DataInputException, TagNotFoundException {
 		if (id == null) {
-			throw new DataInputException();
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
-		return tagRepository.findById(id).orElseThrow(TagNotFoundException::new);
+		return tagRepository.findById(id).orElseThrow(() -> new TagNotFoundException(TAG_NOT_FOUND_MSG));
 	}
 
 	@Override
-	public Tag findByName(String name) throws DataInputException, TagNotFoundException {
-		if (name == null || name.isEmpty()) {
-			throw new DataInputException();
+	public Tag findByName(String tagName) throws DataInputException, TagNotFoundException {
+		if (tagName == null) {
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
-		return tagRepository.findByName(name).orElseThrow(TagNotFoundException::new);
+		if (tagName.isEmpty()) {
+			throw new DataInputException(INCORRECT_INPUT_MSG);
+		}
+		return tagRepository.findByName(tagName).orElseThrow(() -> new TagNotFoundException(TAG_NOT_FOUND_MSG));
 	}
 
 	@Override
 	public Tag update(Tag tag) throws DataInputException {
-		if (!tagValidator.validate(tag)) {
-			throw new DataInputException();
+		Pair<ValidationStatus, String> validationResult = tagValidator.validate(tag);
+		if (tag.getId() == null) {
+			throw new DataInputException(INCORRECT_INPUT_MSG);
+		}
+		if (validationResult.getLeft().equals(ValidationStatus.NOT_VALIDATED)) {
+			throw new DataInputException(validationResult.getRight());
 		}
 		return tagRepository.save(tag);
 	}
@@ -71,7 +88,7 @@ public class TagCRUDServiceImpl implements TagCRUDService {
 	@Override
 	public void delete(Tag tag) throws DataInputException {
 		if (tag.getId() == null) {
-			throw new DataInputException();
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
 		tagRepository.delete(tag);
 	}
@@ -79,7 +96,7 @@ public class TagCRUDServiceImpl implements TagCRUDService {
 	@Override
 	public void deleteById(Long id) throws DataInputException {
 		if (id == null) {
-			throw new DataInputException();
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
 		tagRepository.deleteById(id);
 	}

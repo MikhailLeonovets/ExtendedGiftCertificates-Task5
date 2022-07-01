@@ -6,10 +6,17 @@ import com.itechart.certificates.gift.service.exception.GiftCertificateNotFoundE
 import com.itechart.certificates.gift.service.validator.EntityValidator;
 import com.itechart.certificates.gift.repository.GiftCertificateRepository;
 import com.itechart.certificates.gift.repository.entity.GiftCertificate;
+import com.itechart.certificates.gift.service.validator.constant.ValidationStatus;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.GIFT_CERT_NOT_FOUND_MSG;
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.GIFT_CERT_TAG_NOT_FOUND_MSG;
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.INCORRECT_INPUT_MSG;
+import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.NULL_INPUT_MSG;
 
 @Service
 public class GiftCertificateCRUDServiceImpl implements GiftCertificateCRUDService {
@@ -25,8 +32,9 @@ public class GiftCertificateCRUDServiceImpl implements GiftCertificateCRUDServic
 
 	@Override
 	public GiftCertificate save(GiftCertificate giftCertificate) throws DataInputException {
-		if (!giftCertificateValidator.validate(giftCertificate)) {
-			throw new DataInputException();
+		Pair<ValidationStatus, String> validationResult = giftCertificateValidator.validate(giftCertificate);
+		if (validationResult.getLeft().equals(ValidationStatus.NOT_VALIDATED)) {
+			throw new DataInputException(validationResult.getRight());
 		}
 		return giftCertificateRepository.save(giftCertificate);
 	}
@@ -39,23 +47,32 @@ public class GiftCertificateCRUDServiceImpl implements GiftCertificateCRUDServic
 	@Override
 	public GiftCertificate findById(Long id) throws DataInputException, GiftCertificateNotFoundException {
 		if (id == null) {
-			throw new DataInputException();
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
-		return giftCertificateRepository.findById(id).orElseThrow(GiftCertificateNotFoundException::new);
+		return giftCertificateRepository.findById(id)
+				.orElseThrow(() -> new GiftCertificateNotFoundException(GIFT_CERT_TAG_NOT_FOUND_MSG));
 	}
 
 	@Override
 	public GiftCertificate findByName(String name) throws DataInputException, GiftCertificateNotFoundException {
-		if (name == null || name.isEmpty()) {
-			throw new DataInputException();
+		if (name == null) {
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
-		return giftCertificateRepository.findByName(name).orElseThrow(GiftCertificateNotFoundException::new);
+		if (name.isEmpty()) {
+			throw new DataInputException(INCORRECT_INPUT_MSG);
+		}
+		return giftCertificateRepository.findByName(name).orElseThrow(() ->
+				new GiftCertificateNotFoundException(GIFT_CERT_NOT_FOUND_MSG));
 	}
 
 	@Override
 	public GiftCertificate update(GiftCertificate giftCertificate) throws DataInputException {
-		if (!giftCertificateValidator.validate(giftCertificate) || giftCertificate.getId() == null) {
-			throw new DataInputException();
+		Pair<ValidationStatus, String> validationResult = giftCertificateValidator.validate(giftCertificate);
+		if (validationResult.getLeft().equals(ValidationStatus.NOT_VALIDATED)) {
+			throw new DataInputException(validationResult.getRight());
+		}
+		if (giftCertificate.getId() == null) {
+			throw new DataInputException(INCORRECT_INPUT_MSG);
 		}
 		return giftCertificateRepository.save(giftCertificate);
 	}
@@ -63,7 +80,7 @@ public class GiftCertificateCRUDServiceImpl implements GiftCertificateCRUDServic
 	@Override
 	public void delete(GiftCertificate giftCertificate) throws DataInputException {
 		if (giftCertificate.getId() == null) {
-			throw new DataInputException();
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
 		giftCertificateRepository.delete(giftCertificate);
 	}
@@ -71,7 +88,7 @@ public class GiftCertificateCRUDServiceImpl implements GiftCertificateCRUDServic
 	@Override
 	public void deleteById(Long id) throws DataInputException {
 		if (id == null) {
-			throw new DataInputException();
+			throw new DataInputException(NULL_INPUT_MSG);
 		}
 		giftCertificateRepository.deleteById(id);
 	}
