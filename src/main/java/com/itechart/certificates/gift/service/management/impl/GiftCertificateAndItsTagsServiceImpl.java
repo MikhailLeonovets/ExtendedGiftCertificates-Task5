@@ -9,6 +9,7 @@ import com.itechart.certificates.gift.service.management.GiftCertificateAndItsTa
 import com.itechart.certificates.gift.service.model.GiftCertificateAndItsTags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class GiftCertificateAndItsTagsServiceImpl implements GiftCertificateAndI
 	}
 
 	@Override
+	@Transactional
 	public GiftCertificateAndItsTags save(GiftCertificateAndItsTags giftCertificateAndItsTags) {
 
 		return null;
