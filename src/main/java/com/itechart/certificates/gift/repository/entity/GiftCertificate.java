@@ -9,13 +9,19 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "gift_certificate", schema = "gift_certificates_task5")
@@ -28,7 +34,7 @@ import java.util.Objects;
 public class GiftCertificate extends Identity {
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
-	@Column(name = "description", nullable = false, unique = true)
+	@Column(name = "description", nullable = false)
 	private String description;
 	@Column(name = "price", nullable = false)
 	private BigDecimal price;
@@ -38,6 +44,13 @@ public class GiftCertificate extends Identity {
 	private LocalDateTime dateOfModification;
 	@Column(name = "duration")
 	private Period duration;
+	/*@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "gift_certificate_tag",
+			joinColumns = {@JoinColumn(name = "gift_certificate_id")},
+			inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+	)
+	private Set<Tag> tags;*/
 
 	@Override
 	public boolean equals(Object o) {

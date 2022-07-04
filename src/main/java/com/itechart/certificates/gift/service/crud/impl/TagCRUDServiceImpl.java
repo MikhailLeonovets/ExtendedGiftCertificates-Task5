@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.INCORRECT_INPUT_MSG;
 import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.NULL_INPUT_MSG;
@@ -35,7 +36,8 @@ public class TagCRUDServiceImpl implements TagCRUDService {
 		if (validationResult.getLeft().equals(ValidationStatus.NOT_VALIDATED)) {
 			throw new DataInputException(validationResult.getRight());
 		}
-		return tagRepository.save(tag);
+		Optional<Tag> optionalTag = tagRepository.findByName(tag.getName());
+		return optionalTag.orElseGet(() -> tagRepository.save(tag));
 	}
 
 	@Override
@@ -46,7 +48,8 @@ public class TagCRUDServiceImpl implements TagCRUDService {
 		if (tagName.isEmpty()) {
 			throw new DataInputException(INCORRECT_INPUT_MSG);
 		}
-		return tagRepository.save(new Tag(tagName));
+		Optional<Tag> optionalTag = tagRepository.findByName(tagName);
+		return optionalTag.orElseGet(() -> tagRepository.save(new Tag(tagName)));
 	}
 
 	@Override

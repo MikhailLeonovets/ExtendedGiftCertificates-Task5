@@ -30,7 +30,7 @@ public class GiftCertificateTagCRUDServiceImpl implements GiftCertificateTagCRUD
 
 	@Override
 	public GiftCertificateTag save(GiftCertificateTag giftCertificateTag) throws DataInputException {
-		Pair<ValidationStatus, String>  validationResult
+		Pair<ValidationStatus, String> validationResult
 				= giftCertificateTagEntityValidator.validate(giftCertificateTag);
 		if (validationResult.getLeft().equals(ValidationStatus.NOT_VALIDATED)) {
 			throw new DataInputException(validationResult.getRight());
@@ -92,5 +92,13 @@ public class GiftCertificateTagCRUDServiceImpl implements GiftCertificateTagCRUD
 			throw new DataInputException(NULL_INPUT_MSG);
 		}
 		giftCertificateTagRepository.deleteById(id);
+	}
+
+	@Override
+	public void deleteByGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId) throws DataInputException {
+		if (giftCertificateId == null || tagId == null) {
+			throw new DataInputException(NULL_INPUT_MSG);
+		}
+		giftCertificateTagRepository.deleteByGiftCertificateIdAndTagId(giftCertificateId, tagId);
 	}
 }

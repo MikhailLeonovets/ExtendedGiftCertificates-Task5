@@ -11,6 +11,8 @@ public class ExceptionMessage {
 	 * GiftCertificateNotFoundException message
 	 */
 	public static final String GIFT_CERT_NOT_FOUND_MSG = "Gift Certificate not found!";
+	public static final String GIFT_CERT_NAME_IS_BUSY = "This Gift Certificate's name is busy! Please create with " +
+			"another one.";
 
 	/**
 	 * TagNotFoundException message

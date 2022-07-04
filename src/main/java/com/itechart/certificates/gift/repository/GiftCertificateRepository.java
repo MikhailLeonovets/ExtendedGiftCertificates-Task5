@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface GiftCertificateRepository extends JpaRepository<GiftCertificate, Long> {
 	Optional<GiftCertificate> findByName(String name);
+
 }

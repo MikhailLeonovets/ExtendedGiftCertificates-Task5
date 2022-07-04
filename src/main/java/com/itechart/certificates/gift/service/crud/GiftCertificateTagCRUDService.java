@@ -23,4 +23,5 @@ public interface GiftCertificateTagCRUDService {
 
 	void deleteById(Long id) throws DataInputException;
 
+	void deleteByGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId) throws DataInputException;
 }

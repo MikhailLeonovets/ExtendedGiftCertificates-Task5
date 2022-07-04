@@ -12,4 +12,6 @@ public interface GiftCertificateTagRepository extends JpaRepository<GiftCertific
 
 	List<GiftCertificateTag> findByGiftCertificateId(Long giftCertificateId);
 
+	void deleteByGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId);
+
 }
