@@ -6,6 +6,7 @@ public class ExceptionMessage {
 	 */
 	public static final String NULL_INPUT_MSG = "Input is null!";
 	public static final String INCORRECT_INPUT_MSG = "Incorrect input!";
+	public static final String NULL_FILE_MSG = "Incorrect file input!";
 
 	/**
 	 * GiftCertificateNotFoundException message
@@ -23,4 +24,9 @@ public class ExceptionMessage {
 	 * GiftCertificateTagNotFoundException message
 	 */
 	public static final String GIFT_CERT_TAG_NOT_FOUND_MSG = "Gift Certificate not found!";
+
+	/**
+	 * IncorrectEntityFileException message
+	 */
+	public static final String INCORRECT_ENTITY_FILE_MSG = "This file is incorrect! Cannot parse it into the entities";
 }
