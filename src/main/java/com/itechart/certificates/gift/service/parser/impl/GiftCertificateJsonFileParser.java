@@ -16,7 +16,7 @@ import static com.itechart.certificates.gift.service.exception.constant.Exceptio
 import static com.itechart.certificates.gift.service.exception.constant.ExceptionMessage.NULL_FILE_MSG;
 
 @Service
-public class GiftCertificateJsonFileParser implements EntityFileParser {
+public class GiftCertificateJsonFileParser implements EntityFileParser<GiftCertificateAndItsTags> {
 	@Override
 	public List<GiftCertificateAndItsTags> parse(File file) throws IncorrectEntityFileException, DataInputException {
 		if (file == null) {
